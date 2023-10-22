@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { body, validationResult } from 'express-validator';
 import { RequestValidationError } from "../errors/request-validation-error";
+import bcrypt from 'bcrypt';
 // import { DatabaseConnectionError } from "../errors/database-connection-error";
 import { User, buildUser } from "../models/user";
 import { BadRequestError } from "../errors/bad-request-error";
@@ -29,7 +30,11 @@ router.post('/api/users/signup', [
                 return;
             }
 
-            const user = buildUser(email, password);
+            const salt = await bcrypt.genSalt(10);
+        
+
+            const hashedPassword = await bcrypt.hash(password, salt);
+            const user = buildUser(email, hashedPassword);
             await user.save();
 
             res.status(201).send(user);
