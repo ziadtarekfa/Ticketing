@@ -17,11 +17,12 @@ app.use(signOutRouter);
 app.use(signUpRouter);
 
 
+app.use(errorHandler);
+
 app.all('*', (req, res) => {
     throw new NotFoundError();
 })
 
-app.use(errorHandler);
 
 const start = async () => {
     try {
