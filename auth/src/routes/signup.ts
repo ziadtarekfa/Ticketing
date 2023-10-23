@@ -18,6 +18,8 @@ router.post('/api/users/signup', [
     validateRequest,
     async (req: Request, res: Response, next: NextFunction) => {
 
+        console.log("GIIIIIIIIIIIII");
+
         const { email, password } = req.body;
         const existingUser = await User.findOne({ email: email });
 
