@@ -2,7 +2,8 @@ import buildClient from '../api/build-client';
 
 const LandingPage = ({ currentUser }) => {
 
-
+  console.log("LANDING PAGE BITCH");
+  // console.log(currentUser.email);
   return currentUser ? (
     <h1>You are signed in</h1>
   ) : (
