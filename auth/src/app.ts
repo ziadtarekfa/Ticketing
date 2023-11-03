@@ -1,12 +1,12 @@
 import express from "express";
-import { errorHandler } from "./middlewares/error-handling";
+import { errorHandler } from "@ziadtarekfatickets/common";
 import { json } from "body-parser";
 import cookieParser from 'cookie-parser';
 import { currentUserRouter } from "./routes/current-user";
 import { signInRouter } from "./routes/signin";
 import { signOutRouter } from "./routes/signout";
 import { signUpRouter } from "./routes/signup";
-import { NotFoundError } from "./errors/not-found-error";
+import { NotFoundError } from "@ziadtarekfatickets/common";
 
 const app = express();
 app.use(json());

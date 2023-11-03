@@ -1,12 +1,12 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { body, validationResult } from 'express-validator';
-import { RequestValidationError } from "../errors/request-validation-error";
+import { RequestValidationError } from "@ziadtarekfatickets/common";
 import jwt from "jsonwebtoken";
 import bcrypt from 'bcrypt';
 // import { DatabaseConnectionError } from "../errors/database-connection-error";
 import { User, buildUser } from "../models/user";
-import { BadRequestError } from "../errors/bad-request-error";
-import { validateRequest } from "../middlewares/validate-request";
+import { BadRequestError } from "@ziadtarekfatickets/common";
+import { validateRequest } from "@ziadtarekfatickets/common";
 
 const router = Router();
 

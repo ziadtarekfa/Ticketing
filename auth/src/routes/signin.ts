@@ -1,11 +1,11 @@
 import { NextFunction, Router } from "express";
-import { validateRequest } from "../middlewares/validate-request";
+import { validateRequest } from "@ziadtarekfatickets/common";
 import { body } from "express-validator";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { User } from "../models/user";
 import bcrypt from "bcrypt";
-import { BadRequestError } from "../errors/bad-request-error";
+import { BadRequestError } from "@ziadtarekfatickets/common";
 
 const router = Router();
 
