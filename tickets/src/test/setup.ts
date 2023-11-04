@@ -30,18 +30,11 @@ afterAll(async () => {
 });
 
 global.signin = async () => {
-    const email = 'test@test.com';
-    const password = 'password';
 
-    const response = await request(app)
-        .post('/api/users/signup')
-        .send({
-            email,
-            password
-        })
-        .expect(200);
-
-    const cookie = response.get('Set-Cookie');
+    const cookie =
+        [
+            'jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NDYyNmVmZjQ2ZmY4MDFlYThhYWFhNyIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTY5OTA5NjMwM30.hehlXb4cL7u6eqEbShII0Onv5RjCkMunDQE8i36unSE; Path=/'
+        ];
 
     return cookie;
 };
