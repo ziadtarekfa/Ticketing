@@ -4,14 +4,14 @@ import mongoose from 'mongoose';
 
 it('returns a 404 if the provided id does not exist', async () => {
     const id = new mongoose.Types.ObjectId().toHexString();
+    const cookie = await global.signin();
     await request(app)
         .put(`/api/tickets/${id}`)
-        .set('Cookie', await global.signin())
+        .set('Cookie', cookie)
         .send({
             title: 'aslkdfj',
             price: 20,
-        })
-        .expect(404);
+        }).expect(404);
 });
 
 it('returns a 401 if the user is not authenticated', async () => {

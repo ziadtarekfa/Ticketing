@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-import { currentUser, requireAuth, validateRequest } from '@ziadtarekfatickets/common';
-import { Ticket, buildTicket } from '../models/ticket';
+import { requireAuth, validateRequest } from '@ziadtarekfatickets/common';
+import { buildTicket } from '../models/ticket';
 
 const router = express.Router();
 
@@ -16,6 +16,8 @@ router.post(
     ],
     validateRequest,
     async (req: Request, res: Response) => {
+        console.log("HELLOW WORLD");
+
         const { title, price } = req.body;
 
         const ticket = buildTicket(title, price, req.currentUser!.id);

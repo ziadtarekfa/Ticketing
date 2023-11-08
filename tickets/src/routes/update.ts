@@ -1,11 +1,7 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-import {
-    validateRequest,
-    NotFoundError,
-    requireAuth,
-    NotAuthorizedError,
-} from '@ziadtarekfatickets/common';
+
+import { validateRequest, NotFoundError, requireAuth, NotAuthorizedError } from '@ziadtarekfatickets/common';
 import { Ticket } from '../models/ticket';
 
 const router = express.Router();
@@ -22,6 +18,8 @@ router.put(
     validateRequest,
     async (req: Request, res: Response) => {
         const ticket = await Ticket.findById(req.params.id);
+
+
 
         if (!ticket) {
             throw new NotFoundError();
