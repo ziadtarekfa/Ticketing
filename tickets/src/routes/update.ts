@@ -3,7 +3,7 @@ import { body } from 'express-validator';
 
 import { validateRequest, NotFoundError, requireAuth, NotAuthorizedError } from '@ziadtarekfatickets/common';
 import { Ticket } from '../models/ticket';
-import { TicketUpdatedPublisher } from '../events/publishers/tikcet-updated-publisher';
+import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher';
 import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();

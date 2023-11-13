@@ -16,8 +16,16 @@ spec:
         - name: tickets
           image: ziadtarekfa/tickets:latest
           env:
+            - name: NATS_CLIENTID
+              valueFrom: 
+                fieldRef:
+                  fieldPath: metadata.name
             - name: MONGO_URI
               value: 'mongodb://tickets-mongo-srv:27017/tickets'
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTERID
+              value: ticketing
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:

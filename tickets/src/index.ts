@@ -3,7 +3,7 @@ import app from "./app";
 import { natsWrapper } from "./nats-wrapper";
 const start = async () => {
     try {
-        await natsWrapper.connect('ticketing', 'vdvdf', 'http://nats-srv:4222');
+        await natsWrapper.connect(process.env.NATS_CLUSTERID!, process.env.NATS_CLIENTID!, process.env.NATS_URL!);
 
         natsWrapper.client.on('close', () => {
             console.log('Connection is closed');
