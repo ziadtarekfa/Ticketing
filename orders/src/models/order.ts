@@ -1,3 +1,4 @@
+import { OrderStatus } from "@ziadtarekfatickets/common";
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
@@ -7,7 +8,8 @@ const orderSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        required: true
+        required: true,
+        enum: Object.values(OrderStatus)
     },
     expiresAt: {
         type: mongoose.Schema.Types.Date,
@@ -21,8 +23,8 @@ const orderSchema = new mongoose.Schema({
 
 const Order = mongoose.model('Order', orderSchema);
 
-const buildOrder = (userId: string, status: string, expiresAt: string) => {
-    return new Order({ userId: userId, status: status, expiresAt: expiresAt });
+const buildOrder = (userId: string, status: OrderStatus, expiresAt: Date, ticket: any) => {
+    return new Order({ userId: userId, status: status, expiresAt: expiresAt, ticket });
 }
 
 export { Order, buildOrder };
