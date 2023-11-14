@@ -32,3 +32,12 @@ build:
         manual:
           - src: '**/*.js'
             dest: .
+    - image: ziadtarekfa/orders
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
+
