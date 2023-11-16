@@ -52,7 +52,7 @@ router.post('/api/orders', requireAuth, [
             id: ticket._id.toString(),
             price: ticket.price
         }
-    })
+    });
     
     res.status(201).send(order);
 });
