@@ -3,6 +3,8 @@ import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Ticket } from '../models/ticket';
 import { Order, buildOrder } from '../models/order';
+import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
 // import { Order } from '../models/order';
 
 const router = express.Router();
@@ -41,6 +43,17 @@ router.post('/api/orders', requireAuth, [
     await order.save();
     // Publish an event saying than an order was created
 
+    new OrderCreatedPublisher(natsWrapper.client).publish({
+        id: order._id.toString(),
+        status: order.status,
+        userId: order.userId,
+        expiresAt: order.expiresAt.toISOString(),
+        ticket: {
+            id: ticket._id.toString(),
+            price: ticket.price
+        }
+    })
+    
     res.status(201).send(order);
 });
 
