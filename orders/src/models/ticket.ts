@@ -37,7 +37,7 @@ ticketSchema.methods.isReserved = async function () {
 
 const Ticket = mongoose.model('Ticket', ticketSchema);
 
-const buildTicket = (title: string, price: number) => {
+const buildTicket = (_id: string, title: string, price: number) => {
     return new Ticket({ title: title, price: price });
 }
 
