@@ -20,9 +20,13 @@ router.post('/api/orders', requireAuth, [
 
     const { ticketId } = req.body;
     // Find the ticket the user is trying to order in the db
+    console.log(ticketId);
 
-    const ticket = await Ticket.findById(ticketId);
+    const ticket = await Ticket.findOne({ _id: ticketId });
+    console.log(ticket);
+
     if (!ticket) {
+        console.log("Ticket is not found");
         throw new NotFoundError();
     }
     // Make sure ticket is not already reserved
@@ -53,7 +57,7 @@ router.post('/api/orders', requireAuth, [
             price: ticket.price
         }
     });
-    
+
     res.status(201).send(order);
 });
 

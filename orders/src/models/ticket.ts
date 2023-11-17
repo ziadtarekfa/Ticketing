@@ -8,7 +8,7 @@ interface ITicket extends Document {
     isReserved(): Promise<boolean>;
 }
 
-const ticketSchema = new Schema<ITicket>({
+const ticketSchema = new mongoose.Schema<ITicket>({
     title: {
         type: String,
         required: true
