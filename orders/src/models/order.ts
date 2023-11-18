@@ -1,6 +1,7 @@
 import { OrderStatus } from "@ziadtarekfatickets/common";
 import mongoose from "mongoose";
 import { ITicket } from "./ticket";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface OrderDoc extends mongoose.Document {
     userId: string;
@@ -31,6 +32,8 @@ const orderSchema = new mongoose.Schema<OrderDoc>({
     }
 }, { timestamps: false });
 
+orderSchema.set('versionKey', 'version');
+orderSchema.plugin(updateIfCurrentPlugin);
 const Order = mongoose.model('Order', orderSchema);
 
 const buildOrder = (userId: string, status: OrderStatus, expiresAt: Date, ticket: any) => {
