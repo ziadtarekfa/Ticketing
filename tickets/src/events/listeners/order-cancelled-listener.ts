@@ -1,10 +1,10 @@
-import { Listener, OrderCreatedEvent, Subjects } from "@ziadtarekfatickets/common";
+import { Listener, OrderCancelledEvent, OrderCreatedEvent, Subjects } from "@ziadtarekfatickets/common";
 import { Message } from "node-nats-streaming";
 import { Ticket } from "../../models/ticket";
 import { TicketUpdatedPublisher } from "../publishers/ticket-updated-publisher";
 
-export class OrderCreatedListener extends Listener<OrderCreatedEvent>{
-    subject: Subjects.OrderCreated = Subjects.OrderCreated;
+export class OrderCancelledListener extends Listener<OrderCancelledEvent>{
+    subject: Subjects.OrderCancelled = Subjects.OrderCancelled;
     queueGroupName = 'tickets-service';
 
     async onMessage(data: OrderCreatedEvent['data'], msg: Message) {
@@ -19,7 +19,7 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent>{
 
         // Mark the ticket as being reserved by setting its orderId property
 
-        ticket.set({ orderId: data.id })
+        ticket.set({ orderId: undefined})
         // Save the ticket
         await ticket.save();
 
