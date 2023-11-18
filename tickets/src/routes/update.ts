@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 
-import { validateRequest, NotFoundError, requireAuth, NotAuthorizedError } from '@ziadtarekfatickets/common';
+import { validateRequest, NotFoundError, requireAuth, NotAuthorizedError, BadRequestError } from '@ziadtarekfatickets/common';
 import { Ticket } from '../models/ticket';
 import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher';
 import { natsWrapper } from '../nats-wrapper';
@@ -24,7 +24,9 @@ router.put(
         if (!ticket) {
             throw new NotFoundError();
         }
-
+        if (ticket.orderId) {
+            throw new BadRequestError('Ticket is Reserved');
+        }
         if (ticket.userId !== req.currentUser!.id) {
             throw new NotAuthorizedError();
         }
