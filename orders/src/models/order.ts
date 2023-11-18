@@ -1,7 +1,17 @@
 import { OrderStatus } from "@ziadtarekfatickets/common";
 import mongoose from "mongoose";
+import { ITicket } from "./ticket";
 
-const orderSchema = new mongoose.Schema({
+interface OrderDoc extends mongoose.Document {
+    userId: string;
+    status: OrderStatus;
+    expiresAt: Date;
+    ticket: ITicket;
+    version: number;
+}
+
+
+const orderSchema = new mongoose.Schema<OrderDoc>({
     userId: {
         type: String,
         required: true

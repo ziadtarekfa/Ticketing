@@ -1,10 +1,12 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 import { Order } from "./order";
 import { OrderStatus } from "@ziadtarekfatickets/common";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
-interface ITicket extends Document {
+export interface ITicket extends mongoose.Document {
     title: string;
     price: number;
+    version: number;
     isReserved(): Promise<boolean>;
 }
 
@@ -19,6 +21,9 @@ const ticketSchema = new mongoose.Schema<ITicket>({
         min: 0
     }
 }, { timestamps: false });
+
+ticketSchema.set('versionKey', 'version');
+ticketSchema.plugin(updateIfCurrentPlugin);
 
 ticketSchema.methods.isReserved = async function () {
     const existingOrder = await Order.findOne({
@@ -38,7 +43,7 @@ ticketSchema.methods.isReserved = async function () {
 const Ticket = mongoose.model('Ticket', ticketSchema);
 
 const buildTicket = (_id: string, title: string, price: number) => {
-    return new Ticket({ title: title, price: price });
+    return new Ticket({ _id: _id, title: title, price: price });
 }
 
 export { Ticket, buildTicket };

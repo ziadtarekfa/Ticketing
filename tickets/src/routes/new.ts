@@ -18,7 +18,6 @@ router.post(
     ],
     validateRequest,
     async (req: Request, res: Response) => {
-        console.log("HELLOW WORLD");
 
         const { title, price } = req.body;
 
@@ -28,9 +27,10 @@ router.post(
 
         new TicketCreatedPublisher(natsWrapper.client).publish({
             id: ticket.id,
+            version: ticket.version,
             title: ticket.title,
             price: ticket.price,
-            userId: ticket.userId
+            userId: ticket.userId,
         });
 
         res.status(201).send(ticket);

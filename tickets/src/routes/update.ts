@@ -21,8 +21,6 @@ router.put(
     async (req: Request, res: Response) => {
         const ticket = await Ticket.findById(req.params.id);
 
-
-
         if (!ticket) {
             throw new NotFoundError();
         }
@@ -38,10 +36,11 @@ router.put(
         await ticket.save();
 
         new TicketUpdatedPublisher(natsWrapper.client).publish({
-            id: ticket._id.toString(),
+            id: ticket.id,
             title: ticket.title,
             price: ticket.price,
-            userId: ticket.userId
+            userId: ticket.userId,
+            version: ticket.version
         });
 
         res.send(ticket);
