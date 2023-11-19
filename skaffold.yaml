@@ -40,4 +40,12 @@ build:
         manual:
           - src: '**/*.js'
             dest: .
+    - image: ziadtarekfa/expiration
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
 
