@@ -20,10 +20,7 @@ router.post('/api/orders', requireAuth, [
 
     const { ticketId } = req.body;
     // Find the ticket the user is trying to order in the db
-    console.log(ticketId);
-
     const ticket = await Ticket.findOne({ _id: ticketId });
-    console.log(ticket);
 
     if (!ticket) {
         console.log("Ticket is not found");
