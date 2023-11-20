@@ -10,6 +10,7 @@ export class ExpirationCompleteListener extends Listener<ExpirationCompleteEvent
     queueGroupName = 'orders-service';
 
     async onMessage(data: ExpirationCompleteEvent['data'], msg: Message) {
+        console.log("Received Ticket Published");
         const order = await Order.findById(data.orderId).populate('ticket');
         if (!order) {
             throw new Error('Order Not Found');

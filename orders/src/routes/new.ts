@@ -2,11 +2,9 @@ import { BadRequestError, NotFoundError, OrderStatus, requireAuth, validateReque
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Ticket } from '../models/ticket';
-import { Order, buildOrder } from '../models/order';
+import { buildOrder } from '../models/order';
 import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher';
 import { natsWrapper } from '../nats-wrapper';
-// import { Order } from '../models/order';
-
 const router = express.Router();
 
 const EXPIRATION_ORDER_SECONDS = 15 * 60;
