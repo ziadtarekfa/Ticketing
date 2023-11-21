@@ -9,6 +9,9 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent>{
         const order = buildOrder(data.id, data.version, data.ticket.price, data.userId, data.status);
 
         await order.save();
+        console.log("Payment: Order to save");
+        console.log(order);
+
         msg.ack();
     }
 }
