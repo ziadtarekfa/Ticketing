@@ -2,8 +2,10 @@ import { BadRequestError, NotAuthorizedError, NotFoundError, OrderStatus, requir
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import { Order } from "../models/order";
-
-
+import { stripe } from "../stripe";
+import { buildPayment } from "../models/payment";
+import { PaymentCreatedPublisher } from "../events/publishers/payment-created-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 router.post('/api/payment', requireAuth, [
@@ -23,6 +25,22 @@ router.post('/api/payment', requireAuth, [
         if (order.status === OrderStatus.Cancelled) {
             throw new BadRequestError("Cannot handle cancelled order");
         }
+
+        const charge = await stripe.charges.create({
+            currency: 'usd',
+            amount: order.price * 100,
+            source: token
+        });
+
+        const payment = buildPayment(orderId, charge.id);
+
+        await payment.save();
+
+        new PaymentCreatedPublisher(natsWrapper.client).publish({
+            id: payment._id,
+            orderId: payment.orderId,
+            stripeId: payment.stripeId
+        });
         res.send({ success: true });
     });
 

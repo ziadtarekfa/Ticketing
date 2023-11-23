@@ -1,22 +1,30 @@
-import { Listener, OrderCancelledEvent, OrderCreatedEvent, OrderStatus, Subjects } from "@ziadtarekfatickets/common";
+import {
+  OrderCancelledEvent,
+  Subjects,
+  Listener,
+  OrderStatus,
+} from '@ziadtarekfatickets/common';
 import { Message } from 'node-nats-streaming';
-import { Order, buildOrder } from "../../models/order";
-export class OrderCancelledListener extends Listener<OrderCancelledEvent>{
-    subject: Subjects.OrderCancelled = Subjects.OrderCancelled;
-    queueGroupName = 'payment-service';
+import { queueGroupName } from './queue-group-name';
+import { Order } from '../../models/order';
 
-    async onMessage(data: OrderCancelledEvent['data'], msg: Message) {
+export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
+  subject: Subjects.OrderCancelled = Subjects.OrderCancelled;
+  queueGroupName = queueGroupName;
 
-        console.log("Payment: Order to cancel");
-        console.log(data);
-        const order = await Order.findOne({
-            _id: data.id,
-            version: data.version - 1
-        });
-        if (!order) {
-            throw new Error('Order not found');
-        }
-        order.set({ status: OrderStatus.Cancelled });
-        msg.ack();
+  async onMessage(data: OrderCancelledEvent['data'], msg: Message) {
+    const order = await Order.findOne({
+      _id: data.id,
+      version: data.version - 1,
+    });
+
+    if (!order) {
+      throw new Error('Order not found');
     }
+
+    order.set({ status: OrderStatus.Cancelled });
+    await order.save();
+
+    msg.ack();
+  }
 }
