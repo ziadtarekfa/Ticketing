@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { body } from 'express-validator';
 
 import { validateRequest, NotFoundError, requireAuth, NotAuthorizedError, BadRequestError } from '@ziadtarekfatickets/common';
@@ -18,17 +18,20 @@ router.put(
             .withMessage('Price must be provided and must be greater than 0'),
     ],
     validateRequest,
-    async (req: Request, res: Response) => {
+    async (req: Request, res: Response, next: NextFunction) => {
         const ticket = await Ticket.findById(req.params.id);
 
         if (!ticket) {
-            throw new NotFoundError();
+            next(new NotFoundError());
+            return;
         }
         if (ticket.orderId) {
-            throw new BadRequestError('Ticket is Reserved');
+            next(new BadRequestError('Ticket is Reserved'));
+            return;
         }
         if (ticket.userId !== req.currentUser!.id) {
-            throw new NotAuthorizedError();
+            next(new NotAuthorizedError());
+            return;
         }
 
         ticket.set({
