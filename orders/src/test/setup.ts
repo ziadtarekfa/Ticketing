@@ -38,9 +38,6 @@ global.signin = async () => {
         email: 'test@test.com'
     }, process.env.JWT_KEY!);
 
-    [
-        'jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjUxMjk5MmI3NGRmZTZmNGJkMDNkMSIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTcwMTEyMjcxM30.EpMLzsHwfYYCIVAMRXkq2nb1CfTauxKJCBbqm8_nMIY; Path=/'
-    ]
     // Build session Object. { jwt: MY_JWT }
     const cookie = `jwt=${token}; Path=/`;
     return [cookie];
