@@ -1,5 +1,5 @@
 import { BadRequestError, NotFoundError, OrderStatus, requireAuth, validateRequest } from '@ziadtarekfatickets/common';
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Ticket } from '../models/ticket';
 import { buildOrder } from '../models/order';
@@ -14,7 +14,7 @@ router.post('/api/orders', requireAuth, [
         .not()
         .isEmpty()
         .withMessage('Ticket Id must be provided')
-], validateRequest, async (req: Request, res: Response) => {
+], validateRequest, async (req: Request, res: Response, next: NextFunction) => {
 
     const { ticketId } = req.body;
     // Find the ticket the user is trying to order in the db
@@ -22,12 +22,14 @@ router.post('/api/orders', requireAuth, [
 
     if (!ticket) {
         console.log("Ticket is not found");
-        throw new NotFoundError();
+        next(new NotFoundError());
+        return;
     }
     // Make sure ticket is not already reserved
     const isReserved = await ticket.isReserved();
     if (isReserved) {
-        throw new BadRequestError('Ticket is already reserved');
+        next(new BadRequestError('Ticket is already reserved'));
+        return;
     }
 
     // calculate an expiration date for this order
